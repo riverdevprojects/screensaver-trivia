@@ -45,6 +45,11 @@ jobs:
             -derivedDataPath build/DerivedData -resultBundlePath build/TestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO > build/xcodebuild.log 2>&1 || { tail -200 build/xcodebuild.log; exit 1; }
           tail -70 build/xcodebuild.log
+      - name: Verify built app supports iOS 16
+        run: |
+          minimum_os=$(/usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' build/DerivedData/Build/Products/Debug-iphonesimulator/ScreensaverTrivia.app/Info.plist)
+          echo "Built app MinimumOSVersion: $minimum_os"
+          test "$minimum_os" = "16.0"
       - name: Export test screenshots
         if: always()
         run: |

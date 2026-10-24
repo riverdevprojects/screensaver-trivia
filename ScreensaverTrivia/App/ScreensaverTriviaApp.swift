@@ -10,7 +10,7 @@ struct ScreensaverTriviaApp: App {
             RootView().environmentObject(store)
                 .preferredColorScheme(.dark)
                 .statusBarHidden(true)
-                .onChange(of: scenePhase) { _, phase in store.setActive(phase == .active) }
+                .onChange(of: scenePhase) { phase in store.setActive(phase == .active) }
         }
     }
 }

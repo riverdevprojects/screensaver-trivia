@@ -1,6 +1,6 @@
 # Device acceptance checklist
 
-Use two or more physical iPhones running iOS 17 or later, built from the same commit. This checklist covers behavior that the simulator suite cannot establish.
+Use two or more physical iPhones running iOS 16 or later, built from the same commit. Include an iOS 16 device and a newer iOS version when checking compatibility. This checklist covers behavior that the simulator suite cannot establish.
 
 ## Solo and media
 

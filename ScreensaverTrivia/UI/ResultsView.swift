@@ -79,7 +79,7 @@ struct ResultsView: View {
                 Text("POINTS").font(.party(8, weight: .black)).tracking(1.7)
             }.foregroundStyle(PartyTheme.ink)
                 .frame(maxWidth: .infinity).frame(height: height, alignment: .top).padding(.top, 10)
-                .background(.white.opacity(place == 1 ? 0.48 : 0.25), in: UnevenRoundedRectangle(topLeadingRadius: 18, topTrailingRadius: 18))
+                .background(.white.opacity(place == 1 ? 0.48 : 0.25), in: PodiumShape())
         }.frame(maxWidth: 195)
     }
 

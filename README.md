@@ -4,7 +4,7 @@ A native, landscape iPhone party game. Watch a real location, choose one of four
 
 ## Run on your Mac
 
-Requires **Xcode 16 or later** and an **iPhone or iPhone Simulator running iOS 17 or later**.
+Requires **Xcode 16 or later** and an **iPhone or iPhone Simulator running iOS 16 or later**.
 
 ```sh
 git clone https://github.com/riverdevprojects/screensaver-trivia.git

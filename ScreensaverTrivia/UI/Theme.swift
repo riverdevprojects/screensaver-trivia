@@ -1,4 +1,13 @@
 import SwiftUI
+import UIKit
+
+/// Top-only podium corners without the iOS 17 UnevenRoundedRectangle API.
+struct PodiumShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path(UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft, .topRight],
+            cornerRadii: CGSize(width: 18, height: 18)).cgPath)
+    }
+}
 
 enum PartyTheme {
     static let ink = Color(red: 0.24, green: 0.09, blue: 0.43)

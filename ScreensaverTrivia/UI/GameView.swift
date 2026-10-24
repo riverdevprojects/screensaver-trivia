@@ -125,7 +125,7 @@ struct GameView: View {
                 Rectangle().fill(PartyTheme.ink)
                 VStack(spacing: 3) {
                     Text("NEXT STOP…").font(.party(11, weight: .black)).tracking(2)
-                    Text("\(store.countdown)").font(.party(62, weight: .black)).contentTransition(.numericText())
+                    Text("\(store.countdown)").font(.party(62, weight: .black)).monospacedDigit()
                     Text("Get ready to guess").font(.party(12))
                 }.foregroundStyle(.white).frame(maxWidth: .infinity, maxHeight: .infinity)
             }
