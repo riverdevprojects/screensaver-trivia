@@ -1,0 +1,95 @@
+[
+  {
+    "id": "san-francisco",
+    "name": "San Francisco",
+    "country": "United States",
+    "detail": "Fog rolls across the Golden Gate, linking San Francisco to the Marin Headlands.",
+    "collectionIDs": [
+      "world",
+      "cities",
+      "waterfront"
+    ],
+    "sourceTitle": "Golden Gate Bridge Timelapse.webm",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_Timelapse.webm",
+    "author": "Eugenia Loli",
+    "license": "CC BY 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "id": "paris",
+    "name": "Paris",
+    "country": "France",
+    "detail": "The Eiffel Tower rises above the rooftops of the French capital.",
+    "collectionIDs": [
+      "world",
+      "cities"
+    ],
+    "sourceTitle": "Sunset on Eiffel Tower in Paris - Vimeo.webm",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Sunset_on_Eiffel_Tower_in_Paris_-_Vimeo.webm",
+    "author": "Mythomen",
+    "license": "CC0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "id": "sydney",
+    "name": "Sydney",
+    "country": "Australia",
+    "detail": "The Opera House’s sail-like shells sit on Bennelong Point in Sydney Harbour.",
+    "collectionIDs": [
+      "world",
+      "cities",
+      "waterfront"
+    ],
+    "sourceTitle": "Sydney Opera House drone.webm",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Sydney_Opera_House_drone.webm",
+    "author": "Tim Astor",
+    "license": "CC BY 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "id": "glanni",
+    "name": "Glanni Falls",
+    "country": "Iceland",
+    "detail": "The Norðurá River tumbles over dark volcanic rock at Glanni in western Iceland.",
+    "collectionIDs": [
+      "world",
+      "waterfront"
+    ],
+    "sourceTitle": "Glanni waterfalls in northern Iceland.webm",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Glanni_waterfalls_in_northern_Iceland.webm",
+    "author": "Alexander Grebenkov",
+    "license": "CC BY 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "id": "dubai",
+    "name": "Dubai",
+    "country": "United Arab Emirates",
+    "detail": "The Burj Khalifa anchors the skyline of this city on the Arabian Gulf.",
+    "collectionIDs": [
+      "world",
+      "cities"
+    ],
+    "sourceTitle": "Dubai skyline 2013.webm",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Dubai_skyline_2013.webm",
+    "author": "Pradana Aumars (talk · contribs)",
+    "license": "CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "id": "new-york",
+    "name": "New York City",
+    "country": "United States",
+    "detail": "Manhattan’s dense skyline rises between the Hudson and East rivers.",
+    "collectionIDs": [
+      "world",
+      "cities",
+      "waterfront"
+    ],
+    "sourceTitle": "Time Lapse of New York City.ogv",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Time_Lapse_of_New_York_City.ogv",
+    "author": "Tyler Sparks",
+    "license": "CC BY 2.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/2.0"
+  }
+]

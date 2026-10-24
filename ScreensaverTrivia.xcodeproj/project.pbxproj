@@ -1,0 +1,673 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+		481B01AAEFFA85DDCCF30DF9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "ScreensaverTriviaApp.swift";
+			path = "App/ScreensaverTriviaApp.swift";
+			sourceTree = "<group>";
+		};
+		6C8C139D2C15DC654D44919D = {
+			isa = PBXBuildFile;
+			fileRef = 481B01AAEFFA85DDCCF30DF9;
+		};
+		083C8CEE1F9F20F36BCF2677 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameModels.swift";
+			path = "Core/GameModels.swift";
+			sourceTree = "<group>";
+		};
+		AEB8E1A3EB96A5A76FA65128 = {
+			isa = PBXBuildFile;
+			fileRef = 083C8CEE1F9F20F36BCF2677;
+		};
+		AD9F6A73C40660848F5D0A63 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameRules.swift";
+			path = "Core/GameRules.swift";
+			sourceTree = "<group>";
+		};
+		90C4D106D461F347AFB0FE31 = {
+			isa = PBXBuildFile;
+			fileRef = AD9F6A73C40660848F5D0A63;
+		};
+		712918EE004A7AC9541D7313 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "LocationCatalog.swift";
+			path = "Core/LocationCatalog.swift";
+			sourceTree = "<group>";
+		};
+		D1FA3943C2FAECD6467D1982 = {
+			isa = PBXBuildFile;
+			fileRef = 712918EE004A7AC9541D7313;
+		};
+		0C4DB6D962E4A043FD16EC0E = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameStore.swift";
+			path = "Services/GameStore.swift";
+			sourceTree = "<group>";
+		};
+		078D1C0382E09F069730DCDF = {
+			isa = PBXBuildFile;
+			fileRef = 0C4DB6D962E4A043FD16EC0E;
+		};
+		C504964F75AF7B43B7E792FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "NearbySession.swift";
+			path = "Services/NearbySession.swift";
+			sourceTree = "<group>";
+		};
+		936BFC37EFAE07CF287A04F8 = {
+			isa = PBXBuildFile;
+			fileRef = C504964F75AF7B43B7E792FD;
+		};
+		D9B3D53648C96E98E884C805 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameView.swift";
+			path = "UI/GameView.swift";
+			sourceTree = "<group>";
+		};
+		C9235E4008C24485222BE181 = {
+			isa = PBXBuildFile;
+			fileRef = D9B3D53648C96E98E884C805;
+		};
+		EE4BFDF485DBE8DF3FEC722E = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "HomeView.swift";
+			path = "UI/HomeView.swift";
+			sourceTree = "<group>";
+		};
+		E4876F22681393CC53749C69 = {
+			isa = PBXBuildFile;
+			fileRef = EE4BFDF485DBE8DF3FEC722E;
+		};
+		9ADEDB7B7779B12A8C514715 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "LobbyView.swift";
+			path = "UI/LobbyView.swift";
+			sourceTree = "<group>";
+		};
+		89BA4D952B2AC773A7AD1D00 = {
+			isa = PBXBuildFile;
+			fileRef = 9ADEDB7B7779B12A8C514715;
+		};
+		F70278CB152929027E782228 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "LocationVideoView.swift";
+			path = "UI/LocationVideoView.swift";
+			sourceTree = "<group>";
+		};
+		33029FFA30DE5D49FC18E982 = {
+			isa = PBXBuildFile;
+			fileRef = F70278CB152929027E782228;
+		};
+		E4F416BCA81065A02725803A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "ResultsView.swift";
+			path = "UI/ResultsView.swift";
+			sourceTree = "<group>";
+		};
+		83101049516D628BE3236C7B = {
+			isa = PBXBuildFile;
+			fileRef = E4F416BCA81065A02725803A;
+		};
+		1B309E522F43405C1DA75D8B = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "SettingsView.swift";
+			path = "UI/SettingsView.swift";
+			sourceTree = "<group>";
+		};
+		C89E7051FEDF0A86084F756F = {
+			isa = PBXBuildFile;
+			fileRef = 1B309E522F43405C1DA75D8B;
+		};
+		CAA01FE9A2CD6731722848E9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "Theme.swift";
+			path = "UI/Theme.swift";
+			sourceTree = "<group>";
+		};
+		76AD3FDA410E58C0EE5BEE4E = {
+			isa = PBXBuildFile;
+			fileRef = CAA01FE9A2CD6731722848E9;
+		};
+		E0E27618A2D2A8FEBDD49F35 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder.assetcatalog;
+			name = "Assets.xcassets";
+			path = "Resources/Assets.xcassets";
+			sourceTree = "<group>";
+		};
+		627BBC9C62B0C159B656E415 = {
+			isa = PBXBuildFile;
+			fileRef = E0E27618A2D2A8FEBDD49F35;
+		};
+		AD522E43C900BA07BAC827B3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = "Media";
+			path = "Resources/Media";
+			sourceTree = "<group>";
+		};
+		DBD944CE2DD74D7180C1BA63 = {
+			isa = PBXBuildFile;
+			fileRef = AD522E43C900BA07BAC827B3;
+		};
+		0F18344D5C41D1261CA8CEEB = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.json;
+			name = "locations.json";
+			path = "Resources/locations.json";
+			sourceTree = "<group>";
+		};
+		E7A01A2568F525886F8C7359 = {
+			isa = PBXBuildFile;
+			fileRef = 0F18344D5C41D1261CA8CEEB;
+		};
+		6327A1005FF0B783151E530B = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
+			name = "PrivacyInfo.xcprivacy";
+			path = "Resources/PrivacyInfo.xcprivacy";
+			sourceTree = "<group>";
+		};
+		FC0CB21E6ADF24E540AC513C = {
+			isa = PBXBuildFile;
+			fileRef = 6327A1005FF0B783151E530B;
+		};
+		75B13235D681EFADD9C29A79 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = "Info.plist";
+			path = "Resources/Info.plist";
+			sourceTree = "<group>";
+		};
+		CF8D0BD4B75E8C2C174692A5 = {
+			isa = PBXGroup;
+			children = (
+				481B01AAEFFA85DDCCF30DF9,
+				083C8CEE1F9F20F36BCF2677,
+				AD9F6A73C40660848F5D0A63,
+				712918EE004A7AC9541D7313,
+				0C4DB6D962E4A043FD16EC0E,
+				C504964F75AF7B43B7E792FD,
+				D9B3D53648C96E98E884C805,
+				EE4BFDF485DBE8DF3FEC722E,
+				9ADEDB7B7779B12A8C514715,
+				F70278CB152929027E782228,
+				E4F416BCA81065A02725803A,
+				1B309E522F43405C1DA75D8B,
+				CAA01FE9A2CD6731722848E9,
+				E0E27618A2D2A8FEBDD49F35,
+				AD522E43C900BA07BAC827B3,
+				0F18344D5C41D1261CA8CEEB,
+				6327A1005FF0B783151E530B,
+				75B13235D681EFADD9C29A79,
+			);
+			path = "ScreensaverTrivia";
+			sourceTree = "<group>";
+		};
+		D10ECEDA0FB53BA093BEC557 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C8C139D2C15DC654D44919D,
+				AEB8E1A3EB96A5A76FA65128,
+				90C4D106D461F347AFB0FE31,
+				D1FA3943C2FAECD6467D1982,
+				078D1C0382E09F069730DCDF,
+				936BFC37EFAE07CF287A04F8,
+				C9235E4008C24485222BE181,
+				E4876F22681393CC53749C69,
+				89BA4D952B2AC773A7AD1D00,
+				33029FFA30DE5D49FC18E982,
+				83101049516D628BE3236C7B,
+				C89E7051FEDF0A86084F756F,
+				76AD3FDA410E58C0EE5BEE4E,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C19A4328C9961E8F8A7CF4CD = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C84B5C31679C986BFD935BC6 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				627BBC9C62B0C159B656E415,
+				DBD944CE2DD74D7180C1BA63,
+				E7A01A2568F525886F8C7359,
+				FC0CB21E6ADF24E540AC513C,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		077558806C3CA1B5C070276A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameRulesTests.swift";
+			path = "GameRulesTests.swift";
+			sourceTree = "<group>";
+		};
+		4DC9BC51E6A6ECB6A75B36FC = {
+			isa = PBXBuildFile;
+			fileRef = 077558806C3CA1B5C070276A;
+		};
+		FD15C406D2E7BC4DC3CA5E84 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "GameStoreTests.swift";
+			path = "GameStoreTests.swift";
+			sourceTree = "<group>";
+		};
+		45DC9A6798BA26A504F8FDBC = {
+			isa = PBXBuildFile;
+			fileRef = FD15C406D2E7BC4DC3CA5E84;
+		};
+		EEFE21A1443933CA4DE017DA = {
+			isa = PBXGroup;
+			children = (
+				077558806C3CA1B5C070276A,
+				FD15C406D2E7BC4DC3CA5E84,
+			);
+			path = "ScreensaverTriviaTests";
+			sourceTree = "<group>";
+		};
+		FE3769782B7F5220F0E0D205 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DC9BC51E6A6ECB6A75B36FC,
+				45DC9A6798BA26A504F8FDBC,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F194C20A28A320F4CB82888 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7877D440DA22A092CDF8D79A = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		456C3897133E6F2347D715EF = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = "ScreensaverTriviaUITests.swift";
+			path = "ScreensaverTriviaUITests.swift";
+			sourceTree = "<group>";
+		};
+		0BD2606A19A32A476ED39B0C = {
+			isa = PBXBuildFile;
+			fileRef = 456C3897133E6F2347D715EF;
+		};
+		AE732EC76C6881743F80375B = {
+			isa = PBXGroup;
+			children = (
+				456C3897133E6F2347D715EF,
+			);
+			path = "ScreensaverTriviaUITests";
+			sourceTree = "<group>";
+		};
+		7BD192E90326C20F318036A6 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BD2606A19A32A476ED39B0C,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20BBA25D214DCA909AD8B90A = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA541BF2BEF5B43C2EB9900 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B6CDB6E5D160E013280D3C68 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			path = "ScreensaverTrivia.app";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E02A90D9643568EA39115CFB = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			path = "ScreensaverTriviaTests.xctest";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2DC2D7827160987765974061 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			path = "ScreensaverTriviaUITests.xctest";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00C45FD35CB0F9C5F764F070 = {
+			isa = PBXGroup;
+			children = (
+				B6CDB6E5D160E013280D3C68,
+				E02A90D9643568EA39115CFB,
+				2DC2D7827160987765974061,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADCF10F76EBF2A74473E9DC4 = {
+			isa = PBXGroup;
+			children = (
+				CF8D0BD4B75E8C2C174692A5,
+				EEFE21A1443933CA4DE017DA,
+				AE732EC76C6881743F80375B,
+				00C45FD35CB0F9C5F764F070,
+			);
+			sourceTree = "<group>";
+		};
+		877A6BA951A2EA0025A2ABE8 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+				"DEBUG=1",
+				"$(inherited)",
+			);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		959134B361DD7E21ADEA3164 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		247BF104A9AD002C539DA531 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				877A6BA951A2EA0025A2ABE8,
+				959134B361DD7E21ADEA3164,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3CF6A4F2E05B3AAE7E2CBFEE = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "ScreensaverTrivia/Resources/Info.plist";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		23FB2CAEB38545C3793097DD = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "ScreensaverTrivia/Resources/Info.plist";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9EA62D25DFD1EFBA21F6DE7B = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CF6A4F2E05B3AAE7E2CBFEE,
+				23FB2CAEB38545C3793097DD,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29C7B681C8D62CBAC94D51C0 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9EA62D25DFD1EFBA21F6DE7B;
+			buildPhases = (
+				D10ECEDA0FB53BA093BEC557,
+				C19A4328C9961E8F8A7CF4CD,
+				C84B5C31679C986BFD935BC6,
+			);
+			buildRules = ();
+			dependencies = (
+			);
+			name = ScreensaverTrivia;
+			productName = ScreensaverTrivia;
+			productReference = B6CDB6E5D160E013280D3C68;
+			productType = "com.apple.product-type.application";
+		};
+		E2657B9FA91DD4A55652006F = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreensaverTrivia.app/ScreensaverTrivia";
+			};
+			name = Debug;
+		};
+		B4343C19535B18410503AED7 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreensaverTrivia.app/ScreensaverTrivia";
+			};
+			name = Release;
+		};
+		0AD37307DFDAE852A779B369 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2657B9FA91DD4A55652006F,
+				B4343C19535B18410503AED7,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B4D2F8BFE54E9562F422278 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98F54143AB4E86B28C3AFEE0;
+			proxyType = 1;
+			remoteGlobalIDString = 29C7B681C8D62CBAC94D51C0;
+			remoteInfo = ScreensaverTrivia;
+		};
+		F59E8266325E0BAF0758C1B1 = {
+			isa = PBXTargetDependency;
+			target = 29C7B681C8D62CBAC94D51C0;
+			targetProxy = 2B4D2F8BFE54E9562F422278;
+		};
+		7EC8F98B7A265120217712DE = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AD37307DFDAE852A779B369;
+			buildPhases = (
+				FE3769782B7F5220F0E0D205,
+				0F194C20A28A320F4CB82888,
+				7877D440DA22A092CDF8D79A,
+			);
+			buildRules = ();
+			dependencies = (
+				F59E8266325E0BAF0758C1B1,
+			);
+			name = ScreensaverTriviaTests;
+			productName = ScreensaverTriviaTests;
+			productReference = E02A90D9643568EA39115CFB;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		111EB5BDEFC905F833F7FBD1 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = ScreensaverTrivia;
+			};
+			name = Debug;
+		};
+		1BFC40A8F20BC35A65CAD464 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riverdevprojects.screensavertrivia.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = ScreensaverTrivia;
+			};
+			name = Release;
+		};
+		A703BABEAF536FCAD8A95716 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				111EB5BDEFC905F833F7FBD1,
+				1BFC40A8F20BC35A65CAD464,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B77F2BCC7FC76C097712C2D = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98F54143AB4E86B28C3AFEE0;
+			proxyType = 1;
+			remoteGlobalIDString = 29C7B681C8D62CBAC94D51C0;
+			remoteInfo = ScreensaverTrivia;
+		};
+		4AF79E026DF725958F95D53D = {
+			isa = PBXTargetDependency;
+			target = 29C7B681C8D62CBAC94D51C0;
+			targetProxy = 8B77F2BCC7FC76C097712C2D;
+		};
+		CEFEF1F5CE13C5A04BC4C468 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A703BABEAF536FCAD8A95716;
+			buildPhases = (
+				7BD192E90326C20F318036A6,
+				20BBA25D214DCA909AD8B90A,
+				7BA541BF2BEF5B43C2EB9900,
+			);
+			buildRules = ();
+			dependencies = (
+				4AF79E026DF725958F95D53D,
+			);
+			name = ScreensaverTriviaUITests;
+			productName = ScreensaverTriviaUITests;
+			productReference = 2DC2D7827160987765974061;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		98F54143AB4E86B28C3AFEE0 = {
+			isa = PBXProject;
+			attributes = { BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; };
+			buildConfigurationList = 247BF104A9AD002C539DA531;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = ADCF10F76EBF2A74473E9DC4;
+			productRefGroup = 00C45FD35CB0F9C5F764F070;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				29C7B681C8D62CBAC94D51C0,
+				7EC8F98B7A265120217712DE,
+				CEFEF1F5CE13C5A04BC4C468,
+			);
+		};
+	};
+	rootObject = 98F54143AB4E86B28C3AFEE0;
+}

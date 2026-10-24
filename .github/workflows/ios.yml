@@ -1,0 +1,62 @@
+name: iOS build and tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate offline pack and project
+        run: python3 scripts/validate_project.py
+      - name: Select an available iPhone simulator
+        id: simulator
+        run: |
+          xcodebuild -version
+          xcrun simctl list devices available -j > /tmp/simulators.json
+          python3 - <<'PY'
+          import json, os
+          data = json.load(open('/tmp/simulators.json'))
+          devices = [d for runtime, group in data['devices'].items() if 'iOS' in runtime for d in group if d['isAvailable'] and 'iPhone' in d['name']]
+          device = devices[0]
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('id=' + device['udid'] + '\n')
+          print('Testing on ' + device['name'])
+          PY
+      - name: Build and run unit and UI tests
+        run: |
+          mkdir -p build
+          set -o pipefail
+          xcodebuild test -project ScreensaverTrivia.xcodeproj -scheme ScreensaverTrivia \
+            -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}' \
+            -parallel-testing-enabled NO \
+            -derivedDataPath build/DerivedData -resultBundlePath build/TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO > build/xcodebuild.log 2>&1 || { tail -200 build/xcodebuild.log; exit 1; }
+          tail -70 build/xcodebuild.log
+      - name: Export test screenshots
+        if: always()
+        run: |
+          if [ -d build/TestResults.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/TestResults.xcresult --output-path build/Screenshots || true
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iOS-test-results
+          path: |
+            build/xcodebuild.log
+            build/Screenshots
+            build/TestResults.xcresult
+          retention-days: 7
