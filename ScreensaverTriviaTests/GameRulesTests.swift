@@ -2,6 +2,19 @@ import XCTest
 @testable import ScreensaverTrivia
 
 final class GameRulesTests: XCTestCase {
+    func testEarlyGuessRetrySurvivesWireEncoding() throws {
+        let retry = GuessRetry(matchID: UUID(), roundID: UUID(), choiceID: "paris",
+            hostTime: Date(timeIntervalSince1970: 1_000))
+        let data = try JSONEncoder().encode(WireMessage.retryGuess(retry))
+        guard case .retryGuess(let decoded) = try JSONDecoder().decode(WireMessage.self, from: data) else {
+            return XCTFail("Wrong wire message")
+        }
+        XCTAssertEqual(decoded.matchID, retry.matchID)
+        XCTAssertEqual(decoded.roundID, retry.roundID)
+        XCTAssertEqual(decoded.choiceID, retry.choiceID)
+        XCTAssertEqual(decoded.hostTime, retry.hostTime)
+    }
+
     func testScoringRewardsSpeedAndRejectsInvalidOrLateAnswers() {
         XCTAssertEqual(GameRules.points(correct: true, elapsed: 0, duration: 15), 1_000)
         XCTAssertEqual(GameRules.points(correct: true, elapsed: 7.5, duration: 15), 550)

@@ -40,21 +40,23 @@ struct LobbyView: View {
                                 Spacer()
                                 Text("\(match.players.count)/8").font(.party(13))
                             }.foregroundStyle(.white.opacity(0.75))
-                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 9) {
-                                ForEach(match.players) { player in
-                                    HStack(spacing: 8) {
-                                        AvatarView(avatar: player.avatar, size: 34)
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text(player.name).font(.party(13)).lineLimit(1)
-                                            Text(player.id == match.hostID ? "HOST" : "READY")
-                                                .font(.party(9, weight: .black)).foregroundStyle(PartyTheme.mint)
-                                        }
-                                        Spacer(minLength: 0)
-                                        Image(systemName: "checkmark.circle.fill").foregroundStyle(PartyTheme.mint)
-                                            .font(.system(size: 14))
-                                    }.padding(9).background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
+                            ScrollView {
+                                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 9) {
+                                    ForEach(match.players) { player in
+                                        HStack(spacing: 8) {
+                                            AvatarView(avatar: player.avatar, size: 34)
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text(player.name).font(.party(13)).lineLimit(1)
+                                                Text(player.id == match.hostID ? "HOST" : "READY")
+                                                    .font(.party(9, weight: .black)).foregroundStyle(PartyTheme.mint)
+                                            }
+                                            Spacer(minLength: 0)
+                                            Image(systemName: "checkmark.circle.fill").foregroundStyle(PartyTheme.mint)
+                                                .font(.system(size: 14))
+                                        }.padding(9).background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
+                                    }
                                 }
-                            }
+                            }.accessibilityIdentifier("partyPlayers")
                             if match.players.count < 2 {
                                 Label("Waiting for your first travel buddy…", systemImage: "person.badge.plus")
                                     .font(.party(12, weight: .medium)).foregroundStyle(.white.opacity(0.8))

@@ -122,7 +122,7 @@ struct GameView: View {
                 }
             }.foregroundStyle(.white).padding(16)
             if store.countdown > 0 && match.stage == .round {
-                Rectangle().fill(.ultraThinMaterial)
+                Rectangle().fill(PartyTheme.ink)
                 VStack(spacing: 3) {
                     Text("NEXT STOP…").font(.party(11, weight: .black)).tracking(2)
                     Text("\(store.countdown)").font(.party(62, weight: .black)).contentTransition(.numericText())

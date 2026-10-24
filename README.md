@@ -20,7 +20,7 @@ The repository contains the complete `.xcodeproj`, shared scheme, media and asse
 
 ## Play
 
-- **Solo:** Tap **Solo** to start a five-round tour. Watch the clip and tap one answer. The reveal shows your score and response time; tap **Next destination**. Pause using the top-right button. Solo play also pauses when the app leaves the foreground.
+- **Solo:** Tap **Solo** to start a five-round tour. Watch the clip and tap one answer. The reveal shows your score and response time; tap **Next destination**. Pause using the top-right button. Solo play also pauses when the app leaves the foreground. Automatic pauses resume when you return; a manual pause stays paused until you tap **Keep exploring**.
 - **Party:** Install the app on 2–8 iPhones. Keep them on the same Wi-Fi with Wi-Fi and Bluetooth on, and allow **Local Network** access. On one device choose **Party → Host a party**. On the others choose **Party → Join a nearby party** and tap the host’s name. The host starts the game and advances rounds.
 - **Settings:** Change your name, avatar, collection, number of rounds, time limit and haptics. The host’s collection, round count and timer apply to the party. A collection caps the round count at the number of unique locations it contains.
 
@@ -77,7 +77,7 @@ ScreensaverTriviaTests/
 ScreensaverTriviaUITests/
 ```
 
-To replace or expand the starter footage, add clips and attribution to `Resources/Media` and `Resources/locations.json`. IDs must match the `.mp4` and `.jpg` filenames. Keep at least four locations in each selectable collection. Increment `GameRules.catalogVersion` when changing the pack so nearby devices cannot play mismatched content. Include the new files in the resource folders; the checked-in blue folder reference picks up media automatically.
+To replace or expand the starter footage, add clips and attribution to `Resources/Media` and `Resources/locations.json`. IDs must match the `.mp4` and `.jpg` filenames. Keep at least four locations in each selectable collection. Increment `GameRules.catalogVersion` when changing the pack or making incompatible wire-protocol changes so nearby devices cannot play mismatched builds. Include the new files in the resource folders; the checked-in blue folder reference picks up media automatically.
 
 Development-only tools: `scripts/prepare_media.py` can reproduce the media adaptations from their Commons sources using Python, Pillow and imageio-ffmpeg. `scripts/generate_project.py` reproduces the Xcode project after adding Swift files. Neither is needed to build or run the checked-in app.
 

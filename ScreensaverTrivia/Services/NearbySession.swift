@@ -16,6 +16,8 @@ final class NearbySession: NSObject, ObservableObject {
     var onMessage: ((WireMessage, MCPeerID) -> Void)?
     var onConnection: ((MCPeerID, Bool) -> Void)?
     var onError: ((String) -> Void)?
+    /// In-memory delivery for tests that explicitly disable device networking.
+    var onSend: ((WireMessage, [MCPeerID]?) -> Void)?
     var acceptingInvites = true
 
     private let service = "screen-trivia"
@@ -38,7 +40,7 @@ final class NearbySession: NSObject, ObservableObject {
         guard networkingEnabled else { return }
         let peer = makeSession()
         advertiser = MCNearbyServiceAdvertiser(peer: peer,
-            discoveryInfo: ["name": GameRules.displayName(name), "version": "1"], serviceType: service)
+            discoveryInfo: ["name": GameRules.displayName(name), "version": String(GameRules.catalogVersion)], serviceType: service)
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
     }
@@ -63,7 +65,10 @@ final class NearbySession: NSObject, ObservableObject {
 
     @discardableResult
     func send(_ message: WireMessage, to peers: [MCPeerID]? = nil) -> Bool {
-        guard networkingEnabled else { return true }
+        guard networkingEnabled else {
+            onSend?(message, peers)
+            return true
+        }
         guard let session else { return false }
         let recipients = peers ?? session.connectedPeers
         guard !recipients.isEmpty else { return true }
@@ -127,7 +132,7 @@ extension NearbySession: MCNearbyServiceBrowserDelegate {
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                              withDiscoveryInfo info: [String: String]?) {
         let name = GameRules.displayName(info?["name"] ?? "Explorer")
-        guard info?["version"] == "1" else { return }
+        guard info?["version"] == String(GameRules.catalogVersion) else { return }
         Task { @MainActor in
             guard self.browser === browser else { return }
             if !self.rooms.contains(where: { $0.peer == peerID }) {

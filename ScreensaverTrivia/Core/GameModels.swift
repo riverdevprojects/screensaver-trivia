@@ -80,6 +80,12 @@ struct MatchSnapshot: Codable, Equatable {
 
 struct JoinRequest: Codable { let player: Player; let catalogVersion: Int }
 struct GuessRequest: Codable { let matchID: UUID; let roundID: UUID; let choiceID: String }
+struct GuessRetry: Codable {
+    let matchID: UUID
+    let roundID: UUID
+    let choiceID: String
+    let hostTime: Date
+}
 struct ClockProbe: Codable { let id: UUID; let sentAt: Date }
 struct ClockReply: Codable { let id: UUID; let sentAt: Date; let hostTime: Date }
 
@@ -87,6 +93,7 @@ enum WireMessage: Codable {
     case join(JoinRequest)
     case snapshot(MatchSnapshot)
     case guess(GuessRequest)
+    case retryGuess(GuessRetry)
     case probe(ClockProbe)
     case clock(ClockReply)
     case leave

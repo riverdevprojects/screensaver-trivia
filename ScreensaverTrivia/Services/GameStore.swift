@@ -34,6 +34,7 @@ final class GameStore: ObservableObject {
     private var completedMatches: Set<UUID> = []
     private var joinTimeout: Task<Void, Never>?
     private var pauseStartedAt: Date?
+    private var resumeOnActivation = false
     private var sceneActive = true
 
     init(defaults: UserDefaults = .standard, startTimer: Bool = true,
@@ -205,6 +206,7 @@ final class GameStore: ObservableObject {
         isJoining = false
         soloPaused = false
         pauseStartedAt = nil
+        resumeOnActivation = false
         isParty = false
         screen = .home
         UIApplication.shared.isIdleTimerDisabled = false
@@ -220,8 +222,12 @@ final class GameStore: ObservableObject {
                 leave()
                 alert = "The party ended because this app left the foreground. Keep every player’s app open while playing."
             }
-        } else if active { resumeSolo() }
-        else { pauseSolo() }
+        } else if active {
+            if resumeOnActivation { resumeSolo() }
+        } else if !soloPaused {
+            pauseSolo()
+            resumeOnActivation = soloPaused
+        }
     }
 
     func pauseSolo() {
@@ -237,6 +243,7 @@ final class GameStore: ObservableObject {
             choiceIDs: round.choiceIDs, startsAt: round.startsAt.addingTimeInterval(shift), duration: round.duration)
         soloPaused = false
         pauseStartedAt = nil
+        resumeOnActivation = false
         now = clock()
     }
 
@@ -324,7 +331,6 @@ final class GameStore: ObservableObject {
             if !isHost, peer == hostPeer {
                 nearby.send(.join(JoinRequest(player: Player(id: localID,
                     name: settings.name, avatar: settings.avatar), catalogVersion: GameRules.catalogVersion)), to: [peer])
-                sendClockProbe()
             }
         } else if isHost {
             removePeer(peer)
@@ -363,7 +369,18 @@ final class GameStore: ObservableObject {
             case .guess(let guess):
                 guard let id = peerPlayers[peer] else { return }
                 // Host arrival time is authoritative; clients cannot claim faster answers.
-                accept(guess, playerID: id, receivedAt: clock())
+                let receivedAt = clock()
+                if let match, let round = match.round, match.stage == .round,
+                   guess.matchID == match.matchID, guess.roundID == round.id,
+                   round.choiceIDs.contains(guess.choiceID), roundAnswers[id] == nil,
+                   receivedAt < round.startsAt {
+                    // Clock estimates can run slightly ahead. Explicitly unlock a rejected
+                    // early tap instead of leaving the guest waiting on an unaccepted answer.
+                    nearby.send(.retryGuess(GuessRetry(matchID: match.matchID, roundID: round.id,
+                        choiceID: guess.choiceID, hostTime: receivedAt)), to: [peer])
+                } else {
+                    accept(guess, playerID: id, receivedAt: receivedAt)
+                }
             case .probe(let probe):
                 guard peerPlayers[peer] != nil else { return }
                 nearby.send(.clock(ClockReply(id: probe.id, sentAt: probe.sentAt, hostTime: clock())), to: [peer])
@@ -379,6 +396,7 @@ final class GameStore: ObservableObject {
                    incoming.revision <= current.revision { return }
                 let newRound = match?.round?.id != incoming.round?.id
                 let newMatch = match?.matchID != incoming.matchID
+                let admitted = isJoining
                 match = incoming
                 isJoining = false
                 joinTimeout?.cancel()
@@ -390,6 +408,19 @@ final class GameStore: ObservableObject {
                 }
                 UIApplication.shared.isIdleTimerDisabled = screen == .game
                 if incoming.stage == .reveal { haptic(.medium) }
+                // Probe after admission, when the host has bound this peer to a player.
+                // A probe sent immediately on connection can arrive before that binding.
+                if admitted { sendClockProbe() }
+            case .retryGuess(let retry):
+                guard let match, let round = match.round, match.stage == .round,
+                      retry.matchID == match.matchID, retry.roundID == round.id,
+                      selectedChoice == retry.choiceID,
+                      !match.answeredPlayerIDs.contains(localID) else { return }
+                selectedChoice = nil
+                // Use a conservative clock correction; time in transit only delays the
+                // next allowed tap instead of making it early again.
+                clockOffset = retry.hostTime.timeIntervalSince(clock())
+                now = retry.hostTime
             case .clock(let reply):
                 let received = clock()
                 let rtt = received.timeIntervalSince(reply.sentAt)

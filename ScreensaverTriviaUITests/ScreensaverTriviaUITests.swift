@@ -52,6 +52,10 @@ final class ScreensaverTriviaUITests: XCTestCase {
         XCTAssertTrue(app.buttons["pauseGame"].waitForExistence(timeout: 5))
         app.buttons["pauseGame"].tap()
         XCTAssertTrue(app.buttons["Keep exploring"].waitForExistence(timeout: 5))
+        XCUIDevice.shared.press(.home)
+        app.activate()
+        XCTAssertTrue(app.buttons["Keep exploring"].waitForExistence(timeout: 5),
+                      "Switching apps must preserve a manual pause")
         app.buttons["Keep exploring"].tap()
         XCTAssertTrue(app.buttons["answer0"].isEnabled)
     }

@@ -4,6 +4,116 @@ import MultipeerConnectivity
 
 final class GameStoreTests: XCTestCase {
     @MainActor
+    func testManualPauseSurvivesAppSwitchWhileAutomaticPauseResumes() async throws {
+        var time = Date(timeIntervalSince1970: 1_000)
+        let store = GameStore(startTimer: false, clock: { time })
+        store.startSolo()
+        let round = try XCTUnwrap(store.match?.round)
+        time = round.startsAt.addingTimeInterval(2)
+        store.tick(time)
+        store.pauseSolo()
+        let remaining = store.remaining
+        store.setActive(false)
+        time = time.addingTimeInterval(30)
+        store.setActive(true)
+        XCTAssertTrue(store.soloPaused, "App activation must not cancel the player's manual pause")
+        XCTAssertEqual(store.remaining, remaining)
+        store.resumeSolo()
+        XCTAssertEqual(store.remaining, remaining, accuracy: 0.001)
+
+        store.setActive(false)
+        store.setActive(false) // inactive followed by background must retain pause ownership
+        time = time.addingTimeInterval(20)
+        store.setActive(true)
+        XCTAssertFalse(store.soloPaused, "An automatic pause should resume on activation")
+        XCTAssertEqual(store.remaining, remaining, accuracy: 0.001)
+        store.leave()
+    }
+
+    @MainActor
+    func testEarlyGuestTapIsUnlockedAndCanBeRetriedAfterHostStart() async throws {
+        var time = Date(timeIntervalSince1970: 1_000)
+        let hostTransport = NearbySession(networkingEnabled: false)
+        let guestTransport = NearbySession(networkingEnabled: false)
+        let host = GameStore(startTimer: false, transport: hostTransport, clock: { time })
+        let guest = GameStore(startTimer: false, transport: guestTransport, clock: { time })
+        defer {
+            hostTransport.onSend = nil
+            guestTransport.onSend = nil
+            guest.leave()
+            host.leave()
+        }
+        let hostPeer = MCPeerID(displayName: "retry-host")
+        let guestPeer = MCPeerID(displayName: "retry-guest")
+        hostTransport.onSend = { message, peers in
+            if peers?.contains(guestPeer) ?? true { guestTransport.onMessage?(message, hostPeer) }
+        }
+        guestTransport.onSend = { message, peers in
+            if peers?.contains(hostPeer) ?? true { hostTransport.onMessage?(message, guestPeer) }
+        }
+        host.hostParty()
+        guest.findParty()
+        guest.join(NearbyRoom(peer: hostPeer, name: "Host"))
+        guestTransport.onConnection?(hostPeer, true)
+        XCTAssertEqual(host.match?.players.count, 2)
+        host.startMatch()
+        let round = try XCTUnwrap(host.match?.round)
+        // Simulate an overestimated guest clock allowing a tap before the host starts.
+        guest.tick(round.startsAt)
+        XCTAssertTrue(guest.canAnswer)
+        guest.choose(round.locationID)
+        XCTAssertNil(guest.selectedChoice, "The rejected early answer must not remain locked")
+        XCTAssertFalse(guest.canAnswer)
+        XCTAssertTrue(host.match?.answeredPlayerIDs.isEmpty ?? false)
+        time = round.startsAt.addingTimeInterval(2)
+        host.tick(time)
+        guest.tick(time)
+        guest.choose(round.locationID)
+        XCTAssertEqual(host.match?.answeredPlayerIDs, [guest.localID])
+        XCTAssertEqual(guest.selectedChoice, round.locationID)
+        host.choose(round.locationID)
+        XCTAssertEqual(guest.match?.stage, .reveal)
+        XCTAssertEqual(guest.localPlayer?.score, 880)
+        guest.leave()
+        host.leave()
+    }
+
+    @MainActor
+    func testDelayedRetryCannotUnlockAnAcceptedAnswerOrAnotherRound() async throws {
+        var time = Date(timeIntervalSince1970: 1_000)
+        let transport = NearbySession(networkingEnabled: false)
+        let guest = GameStore(startTimer: false, transport: transport, clock: { time })
+        let hostPeer = MCPeerID(displayName: "host")
+        guest.findParty()
+        guest.join(NearbyRoom(peer: hostPeer, name: "Host"))
+        let host = Player(id: UUID(), name: "Host", avatar: 1)
+        var snapshot = MatchSnapshot(matchID: UUID(), hostID: host.id,
+            players: [host, Player(id: guest.localID, name: "Guest", avatar: 0)])
+        let location = try XCTUnwrap(guest.catalog.locations.first)
+        let round = GameRules.makeRound(location: location, allLocations: guest.catalog.locations,
+            number: 1, startsAt: time, duration: 15)
+        snapshot.stage = .round
+        snapshot.round = round
+        snapshot.revision = 1
+        transport.onMessage?(.snapshot(snapshot), hostPeer)
+        time = time.addingTimeInterval(1)
+        guest.tick(time)
+        guest.choose(round.locationID)
+        let stale = GuessRetry(matchID: snapshot.matchID, roundID: UUID(),
+            choiceID: round.locationID, hostTime: time)
+        transport.onMessage?(.retryGuess(stale), hostPeer)
+        XCTAssertEqual(guest.selectedChoice, round.locationID)
+        snapshot.answeredPlayerIDs = [guest.localID]
+        snapshot.revision = 2
+        transport.onMessage?(.snapshot(snapshot), hostPeer)
+        let alreadyAccepted = GuessRetry(matchID: snapshot.matchID, roundID: round.id,
+            choiceID: round.locationID, hostTime: time)
+        transport.onMessage?(.retryGuess(alreadyAccepted), hostPeer)
+        XCTAssertEqual(guest.selectedChoice, round.locationID)
+        guest.leave()
+    }
+
+    @MainActor
     func testHostWaitsForAllPlayersAndScoresEachGuessOnce() async throws {
         var time = Date(timeIntervalSince1970: 1_000)
         let transport = NearbySession(networkingEnabled: false)
