@@ -1,6 +1,19 @@
 import XCTest
 
 final class ScreensaverTriviaUITests: XCTestCase {
+    func testPartyLobbyWaitsForFriends() {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+        app.buttons["playParty"].tap()
+        app.buttons["Host a party"].tap()
+        XCTAssertTrue(app.buttons["startParty"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["startParty"].isEnabled)
+        screenshot("05-party-lobby")
+    }
+
     func testSoloTourFromHomeThroughResultsAndReplay() {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .landscapeLeft

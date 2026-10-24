@@ -9,7 +9,7 @@ struct SettingsView: View {
                 Section("Your explorer") {
                     TextField("Name", text: $store.settings.name)
                         .textContentType(.nickname).autocorrectionDisabled()
-                        .onChange(of: store.settings.name) { value in
+                        .onChange(of: store.settings.name) { _, value in
                             if value.count > 16 { store.settings.name = String(value.prefix(16)) }
                         }.accessibilityIdentifier("playerName")
                     HStack(spacing: 12) {

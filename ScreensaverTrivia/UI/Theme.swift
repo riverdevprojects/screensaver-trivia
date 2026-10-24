@@ -45,18 +45,28 @@ struct PartyBackground: View {
 struct PartyButtonStyle: ButtonStyle {
     var color: Color = .white
     var foreground: Color = PartyTheme.ink
+    var verticalPadding: CGFloat = 13
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.party(18))
             .foregroundStyle(foreground)
             .padding(.horizontal, 18)
-            .padding(.vertical, 13)
+            .padding(.vertical, verticalPadding)
             .frame(maxWidth: .infinity)
             .background(color, in: RoundedRectangle(cornerRadius: 20))
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(.white.opacity(0.25), lineWidth: 1))
+            .compositingGroup()
             .shadow(color: PartyTheme.ink.opacity(0.23), radius: 0, x: 0, y: configuration.isPressed ? 1 : 5)
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+struct AnswerButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

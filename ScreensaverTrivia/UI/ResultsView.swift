@@ -58,7 +58,7 @@ struct ResultsView: View {
                     }.padding(.horizontal, 24).padding(.vertical, 12)
                 }
             }
-        }.accessibilityIdentifier("resultsScreen")
+        }
     }
 
     private func podium(_ player: Player, place: Int, height: CGFloat) -> some View {

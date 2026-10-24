@@ -23,26 +23,34 @@ final class NearbySession: NSObject, ObservableObject {
     private var advertiser: MCNearbyServiceAdvertiser?
     private var browser: MCNearbyServiceBrowser?
     private var hosting = false
+    private let networkingEnabled: Bool
+
+    init(networkingEnabled: Bool = true) {
+        self.networkingEnabled = networkingEnabled
+        super.init()
+    }
 
     func host(name: String) {
         reset()
         hosting = true
         acceptingInvites = true
+        status = "Party open · waiting for friends"
+        guard networkingEnabled else { return }
         let peer = makeSession()
         advertiser = MCNearbyServiceAdvertiser(peer: peer,
             discoveryInfo: ["name": GameRules.displayName(name), "version": "1"], serviceType: service)
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
-        status = "Party open · waiting for friends"
     }
 
     func browse() {
         reset()
+        status = "Looking for nearby parties…"
+        guard networkingEnabled else { return }
         let peer = makeSession()
         browser = MCNearbyServiceBrowser(peer: peer, serviceType: service)
         browser?.delegate = self
         browser?.startBrowsingForPeers()
-        status = "Looking for nearby parties…"
     }
 
     func join(_ room: NearbyRoom) {
@@ -55,6 +63,7 @@ final class NearbySession: NSObject, ObservableObject {
 
     @discardableResult
     func send(_ message: WireMessage, to peers: [MCPeerID]? = nil) -> Bool {
+        guard networkingEnabled else { return true }
         guard let session else { return false }
         let recipients = peers ?? session.connectedPeers
         guard !recipients.isEmpty else { return true }

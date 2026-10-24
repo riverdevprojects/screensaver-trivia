@@ -17,7 +17,7 @@ struct GameView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             VStack(spacing: 8) {
                                 ForEach(Array(round.choiceIDs.enumerated()), id: \.element) { index, id in
-                                    answerButton(id: id, index: index, match: match, round: round)
+                                    answerButton(id: id, index: index, match: match, round: round, compact: geo.size.height < 340)
                                 }
                             }.frame(width: geo.size.width * 0.37)
                         }.frame(maxHeight: .infinity)
@@ -69,7 +69,7 @@ struct GameView: View {
                 Image(systemName: store.isParty ? "xmark" : "pause.fill").font(.system(size: 13, weight: .bold))
                     .frame(width: 44, height: 36).background(.white.opacity(0.15), in: Capsule())
             }.accessibilityLabel(store.isParty ? "Leave game" : "Pause game").accessibilityIdentifier("pauseGame")
-        }.foregroundStyle(.white).frame(height: 36)
+        }.foregroundStyle(.white).frame(height: 32)
     }
 
     private func playerRibbon(match: MatchSnapshot) -> some View {
@@ -103,7 +103,7 @@ struct GameView: View {
                         .font(.party(12, weight: .medium)).foregroundStyle(.white.opacity(0.7)).padding(.leading, 6)
                 }
             }
-        }.frame(height: 48)
+        }.frame(height: 44)
     }
 
     private func videoPanel(match: MatchSnapshot, round: RoundPrompt) -> some View {
@@ -135,7 +135,7 @@ struct GameView: View {
         .shadow(color: PartyTheme.ink.opacity(0.2), radius: 0, x: 0, y: 5)
     }
 
-    private func answerButton(id: String, index: Int, match: MatchSnapshot, round: RoundPrompt) -> some View {
+    private func answerButton(id: String, index: Int, match: MatchSnapshot, round: RoundPrompt, compact: Bool) -> some View {
         let location = store.catalog.location(id)
         let revealed = match.stage == .reveal
         let selected = store.selectedChoice == id
@@ -147,8 +147,8 @@ struct GameView: View {
                 Text(["A", "B", "C", "D"][index]).font(.party(12, weight: .black))
                     .frame(width: 27, height: 27).background(PartyTheme.ink.opacity(0.07), in: Circle())
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(location?.name ?? "Unknown place").font(.party(16)).lineLimit(1).minimumScaleFactor(0.7)
-                    Text(location?.country ?? "").font(.party(9, weight: .semibold)).opacity(0.55).lineLimit(1)
+                    Text(location?.name ?? "Unknown place").font(.party(compact ? 14 : 16)).lineLimit(1).minimumScaleFactor(0.7)
+                    if !compact { Text(location?.country ?? "").font(.party(9, weight: .semibold)).opacity(0.55).lineLimit(1) }
                 }
                 Spacer(minLength: 0)
                 if correct { Image(systemName: "checkmark.circle.fill").font(.system(size: 20)) }
@@ -160,10 +160,11 @@ struct GameView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .background(fill, in: RoundedRectangle(cornerRadius: 17))
             .overlay(RoundedRectangle(cornerRadius: 17).stroke(.white.opacity(0.35), lineWidth: 1))
+            .compositingGroup()
             .shadow(color: PartyTheme.ink.opacity(0.22), radius: 0, x: 0, y: 3)
             .opacity(revealed && !correct && !selected ? 0.55 : 1)
         }
-        .buttonStyle(.plain).disabled(!store.canAnswer)
+        .buttonStyle(AnswerButtonStyle()).disabled(!store.canAnswer)
         .accessibilityIdentifier("answer\(index)")
         .accessibilityLabel("\(["A", "B", "C", "D"][index]), \(location?.name ?? ""), \(location?.country ?? "")")
         .accessibilityValue(correct ? "Correct answer" : selected ? "Your answer" : "")

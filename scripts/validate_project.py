@@ -1,8 +1,6 @@
 """Fast, portable integrity checks; native compilation and XCTest run on macOS."""
 import json
 import plistlib
-import re
-import struct
 import xml.etree.ElementTree as ET
 from pathlib import Path
 

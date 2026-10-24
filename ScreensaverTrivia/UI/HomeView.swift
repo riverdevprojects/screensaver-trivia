@@ -8,7 +8,8 @@ struct HomeView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let compact = geo.size.height < 380
+            let compact = geo.size.height < 450
+            let tiny = geo.size.height < 340
             ZStack {
                 PartyBackground()
                 VStack(spacing: compact ? 10 : 18) {
@@ -26,17 +27,17 @@ struct HomeView: View {
                             .accessibilityIdentifier("settings")
                     }
                     HStack(spacing: 24) {
-                        VStack(alignment: .leading, spacing: compact ? 10 : 16) {
+                        VStack(alignment: .leading, spacing: tiny ? 8 : compact ? 10 : 16) {
                             Text("Know the place?\nWin the race.")
-                                .font(.party(compact ? 30 : 39, weight: .black))
+                                .font(.party(tiny ? 26 : compact ? 30 : 39, weight: .black))
                                 .foregroundStyle(.white).lineSpacing(-2)
                                 .fixedSize(horizontal: false, vertical: true)
                             Text("Watch the world. Make your guess.")
                                 .font(.party(13, weight: .medium)).foregroundStyle(.white.opacity(0.85))
-                            menuButton(title: "SOLO", subtitle: "Your own little world tour", symbol: "bolt.fill", color: .orange) {
+                            menuButton(title: "SOLO", subtitle: "Your own little world tour", symbol: "bolt.fill", color: .orange, compact: tiny) {
                                 store.startSolo()
                             }.accessibilityIdentifier("playSolo")
-                            menuButton(title: "PARTY", subtitle: "2–8 friends · nearby iPhones", symbol: "party.popper.fill", color: PartyTheme.pink) {
+                            menuButton(title: "PARTY", subtitle: "2–8 friends · nearby iPhones", symbol: "party.popper.fill", color: PartyTheme.pink, compact: tiny) {
                                 showPartyOptions = true
                             }.accessibilityIdentifier("playParty")
                         }
@@ -70,19 +71,19 @@ struct HomeView: View {
         }
     }
 
-    private func menuButton(title: String, subtitle: String, symbol: String, color: Color,
+    private func menuButton(title: String, subtitle: String, symbol: String, color: Color, compact: Bool,
                             action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 14) {
                 Image(systemName: symbol).font(.system(size: 27, weight: .bold))
                     .foregroundStyle(color).frame(width: 35)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title).font(.party(20, weight: .black))
+                    Text(title).font(.party(compact ? 18 : 20, weight: .black))
                     Text(subtitle).font(.party(11, weight: .semibold)).opacity(0.65)
                 }
                 Spacer()
                 Image(systemName: "chevron.right").font(.system(size: 13, weight: .black)).opacity(0.35)
             }
-        }.buttonStyle(PartyButtonStyle())
+        }.buttonStyle(PartyButtonStyle(verticalPadding: compact ? 8 : 13))
     }
 }

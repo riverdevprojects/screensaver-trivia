@@ -17,12 +17,13 @@ final class GameStore: ObservableObject {
     @Published private(set) var isJoining = false
     @Published private(set) var soloPaused = false
 
-    let nearby = NearbySession()
+    let nearby: NearbySession
     let catalog = LocationCatalog()
     let localID = UUID()
     private(set) var isHost = true
     private(set) var isParty = false
     private let defaults: UserDefaults
+    private let clock: () -> Date
     private var timer: AnyCancellable?
     private var deck: [Location] = []
     private var roundAnswers: [UUID: Answer] = [:]
@@ -35,10 +36,14 @@ final class GameStore: ObservableObject {
     private var pauseStartedAt: Date?
     private var sceneActive = true
 
-    init(defaults: UserDefaults = .standard, startTimer: Bool = true) {
+    init(defaults: UserDefaults = .standard, startTimer: Bool = true,
+         transport: NearbySession? = nil, clock: @escaping () -> Date = Date.init) {
         self.defaults = defaults
+        self.clock = clock
+        nearby = transport ?? NearbySession(networkingEnabled: !Self.isUITesting)
         settings = defaults.data(forKey: "settings").flatMap { try? JSONDecoder().decode(GameSettings.self, from: $0) } ?? GameSettings()
         stats = defaults.data(forKey: "stats").flatMap { try? JSONDecoder().decode(PersonalStats.self, from: $0) } ?? PersonalStats()
+        now = clock()
         nearby.onMessage = { [weak self] message, peer in self?.receive(message, from: peer) }
         nearby.onConnection = { [weak self] peer, connected in self?.connection(peer, connected: connected) }
         nearby.onError = { [weak self] message in self?.alert = message }
@@ -146,7 +151,7 @@ final class GameStore: ObservableObject {
         selectedChoice = choiceID
         haptic(.light)
         if isHost {
-            accept(request, playerID: localID, receivedAt: now)
+            accept(request, playerID: localID, receivedAt: max(now, clock()))
         } else if let hostPeer {
             if !nearby.send(.guess(request), to: [hostPeer]) { selectedChoice = nil }
         }
@@ -164,7 +169,7 @@ final class GameStore: ObservableObject {
     }
 
     func playAgain() {
-        guard isHost, let previous = match else { return }
+        guard isHost, let previous = match, previous.stage == .finished else { return }
         var lobby = MatchSnapshot(matchID: UUID(), hostID: localID,
             players: previous.players.filter(\.isConnected).map {
                 Player(id: $0.id, name: $0.name, avatar: $0.avatar)
@@ -221,22 +226,22 @@ final class GameStore: ObservableObject {
 
     func pauseSolo() {
         guard !isParty, !soloPaused, match?.stage == .round else { return }
-        pauseStartedAt = Date()
+        pauseStartedAt = clock()
         soloPaused = true
     }
 
     func resumeSolo() {
         guard soloPaused, let pausedAt = pauseStartedAt, let round = match?.round else { return }
-        let shift = Date().timeIntervalSince(pausedAt)
+        let shift = clock().timeIntervalSince(pausedAt)
         match?.round = RoundPrompt(id: round.id, number: round.number, locationID: round.locationID,
             choiceIDs: round.choiceIDs, startsAt: round.startsAt.addingTimeInterval(shift), duration: round.duration)
         soloPaused = false
         pauseStartedAt = nil
-        now = Date()
+        now = clock()
     }
 
     func tick(_ date: Date) {
-        guard !soloPaused else { return }
+        guard screen == .game, !soloPaused else { return }
         now = date.addingTimeInterval(isHost ? 0 : clockOffset)
         guard isHost, match?.stage == .round, let round = match?.round else { return }
         if now >= round.deadline { reveal() }
@@ -263,8 +268,8 @@ final class GameStore: ObservableObject {
 
     private func beginRound(number: Int) {
         guard let location = deck[safe: number - 1] else { return }
-        let lead: TimeInterval = ProcessInfo.processInfo.arguments.contains("--uitesting") ? 0 : 3
-        now = Date()
+        let lead: TimeInterval = Self.isUITesting ? 0 : 3
+        now = clock()
         selectedChoice = nil
         roundAnswers = [:]
         match?.answers = []
@@ -358,10 +363,10 @@ final class GameStore: ObservableObject {
             case .guess(let guess):
                 guard let id = peerPlayers[peer] else { return }
                 // Host arrival time is authoritative; clients cannot claim faster answers.
-                accept(guess, playerID: id, receivedAt: Date())
+                accept(guess, playerID: id, receivedAt: clock())
             case .probe(let probe):
                 guard peerPlayers[peer] != nil else { return }
-                nearby.send(.clock(ClockReply(id: probe.id, sentAt: probe.sentAt, hostTime: Date())), to: [peer])
+                nearby.send(.clock(ClockReply(id: probe.id, sentAt: probe.sentAt, hostTime: clock())), to: [peer])
             case .leave: removePeer(peer)
             default: break
             }
@@ -386,7 +391,7 @@ final class GameStore: ObservableObject {
                 UIApplication.shared.isIdleTimerDisabled = screen == .game
                 if incoming.stage == .reveal { haptic(.medium) }
             case .clock(let reply):
-                let received = Date()
+                let received = clock()
                 let rtt = received.timeIntervalSince(reply.sentAt)
                 if rtt >= 0 && rtt < bestRoundTrip {
                     bestRoundTrip = rtt
@@ -405,9 +410,17 @@ final class GameStore: ObservableObject {
     }
 
     private var clockProbeCount = 0
+    private static var isUITesting: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("--uitesting")
+        #else
+        return false
+        #endif
+    }
+
     private func sendClockProbe() {
         guard let hostPeer else { return }
-        nearby.send(.probe(ClockProbe(id: UUID(), sentAt: Date())), to: [hostPeer])
+        nearby.send(.probe(ClockProbe(id: UUID(), sentAt: clock())), to: [hostPeer])
     }
 
     private func recordStats() {

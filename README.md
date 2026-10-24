@@ -52,7 +52,7 @@ xcodebuild test \
   CODE_SIGNING_ALLOWED=NO
 ```
 
-Choose an installed simulator name if yours differs. Tests cover scoring boundaries, shuffled choices, unique decks, invalid and duplicate guesses, ranking, message encoding, complete solo games, timeouts, pause/resume, replay and bundled media. UI tests exercise Home → game → reveal → results → replay and capture screenshots.
+Choose an installed simulator name if yours differs. Tests cover scoring boundaries, shuffled choices, unique decks, invalid and duplicate guesses, ranking, message encoding, complete solo games, timeouts, pause/resume, replay and bundled media. Simulated host/guest tests verify hidden answers, authoritative scoring, stale snapshots and disconnect handling without a radio connection. UI tests exercise Home → game → reveal → results → replay, settings and the lobby, and capture screenshots. The Debug-only `--uitesting` launch argument skips round countdowns and disables actual nearby discovery for deterministic UI tests.
 
 The [iOS build and tests workflow](.github/workflows/ios.yml) runs on a GitHub-hosted Mac for pushes to `main` and pull requests. It publishes the build log, XCTest result bundle and screenshots under the run’s **iOS-test-results** artifact. See the [Actions tab](https://github.com/riverdevprojects/screensaver-trivia/actions) for actual run results.
 
