@@ -4,6 +4,7 @@ enum GameRules {
     // Increment when either the offline pack or wire protocol becomes incompatible.
     static let catalogVersion = 2
     static let maximumPlayers = 8
+    static let partyRevealDuration: TimeInterval = 8
 
     /// Correct answers earn 1,000 at the start, falling to 100 at the deadline.
     /// Wrong, non-finite and late answers earn zero. Time comes from the host.

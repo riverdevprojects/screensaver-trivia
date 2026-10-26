@@ -73,6 +73,8 @@ struct MatchSnapshot: Codable, Equatable {
     var collection: Collection = .world
     var roundCount: Int = 5
     var round: RoundPrompt?
+    // Host-clock deadline shared by every player during a party reveal.
+    var revealEndsAt: Date?
     var answers: [Answer] = []
     // Only populated after reveal. During play the ribbon shows locks, not correctness.
     var answeredPlayerIDs: [UUID] = []
