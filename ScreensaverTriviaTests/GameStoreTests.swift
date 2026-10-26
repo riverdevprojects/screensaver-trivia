@@ -4,6 +4,127 @@ import MultipeerConnectivity
 
 final class GameStoreTests: XCTestCase {
     @MainActor
+    func testPartyAutomaticallyAdvancesAllPlayersAfterRevealAndFinishes() async throws {
+        var time = Date(timeIntervalSince1970: 1_000)
+        let hostTransport = NearbySession(networkingEnabled: false)
+        let guestTransport = NearbySession(networkingEnabled: false)
+        let host = GameStore(startTimer: false, transport: hostTransport, clock: { time })
+        let guest = GameStore(startTimer: false, transport: guestTransport, clock: { time })
+        defer {
+            hostTransport.onSend = nil
+            guestTransport.onSend = nil
+            guest.leave()
+            host.leave()
+        }
+        let hostPeer = MCPeerID(displayName: "auto-host")
+        let guestPeer = MCPeerID(displayName: "auto-guest")
+        hostTransport.onSend = { message, peers in
+            if peers?.contains(guestPeer) ?? true {
+                // Exercise the actual wire encoding of the shared reveal deadline.
+                let data = try! JSONEncoder().encode(message)
+                guestTransport.onMessage?(try! JSONDecoder().decode(WireMessage.self, from: data), hostPeer)
+            }
+        }
+        guestTransport.onSend = { message, peers in
+            if peers?.contains(hostPeer) ?? true { hostTransport.onMessage?(message, guestPeer) }
+        }
+        host.hostParty()
+        guest.findParty()
+        guest.join(NearbyRoom(peer: hostPeer, name: "Host"))
+        guestTransport.onConnection?(hostPeer, true)
+        host.startMatch()
+        let roundCount = try XCTUnwrap(host.match?.roundCount)
+        for number in 1...roundCount {
+            let round = try XCTUnwrap(host.match?.round)
+            XCTAssertEqual(round.number, number)
+            XCTAssertNil(host.match?.revealEndsAt)
+            if number == 1 {
+                time = round.startsAt.addingTimeInterval(2)
+                host.tick(time)
+                guest.tick(time)
+                guest.choose(round.locationID)
+                XCTAssertEqual(host.match?.stage, .round, "Wait for everyone's guess")
+                XCTAssertNil(host.match?.revealEndsAt)
+                // The last guess can arrive between timer ticks. Start the full delay now.
+                time = time.addingTimeInterval(1)
+                host.choose(round.locationID)
+            } else {
+                time = round.deadline
+                host.tick(time)
+            }
+            let deadline = try XCTUnwrap(host.match?.revealEndsAt)
+            XCTAssertEqual(deadline.timeIntervalSince(time), 8, accuracy: 0.001)
+            XCTAssertEqual(guest.match?.revealEndsAt, deadline)
+            let scores = host.match?.players.map(\.score)
+            guest.tick(time)
+            XCTAssertEqual(host.revealCountdown, 8)
+            XCTAssertEqual(guest.revealCountdown, 8)
+            time = deadline.addingTimeInterval(-0.01)
+            host.tick(time)
+            XCTAssertEqual(host.match?.stage, .reveal)
+            XCTAssertEqual(host.revealCountdown, 1)
+            // Even a guest whose clock is ahead must wait for the host's transition.
+            guest.tick(deadline.addingTimeInterval(1))
+            XCTAssertEqual(guest.match?.stage, .reveal)
+            time = deadline
+            host.tick(time)
+            host.tick(time) // A duplicate tick must not skip a destination or rescore.
+            XCTAssertEqual(host.match?.players.map(\.score), scores)
+            XCTAssertEqual(guest.match?.players, host.match?.players)
+            XCTAssertNil(host.match?.revealEndsAt)
+            if number < roundCount {
+                XCTAssertEqual(host.match?.stage, .round)
+                XCTAssertEqual(host.match?.round?.number, number + 1)
+                XCTAssertEqual(guest.match?.round, host.match?.round)
+                XCTAssertNil(guest.selectedChoice)
+            } else {
+                XCTAssertEqual(host.screen, .results)
+                XCTAssertEqual(guest.screen, .results)
+                XCTAssertEqual(guest.match?.stage, .finished)
+            }
+        }
+        host.playAgain()
+        XCTAssertEqual(host.match?.stage, .lobby)
+        XCTAssertNil(host.match?.revealEndsAt)
+        host.startMatch()
+        XCTAssertEqual(guest.match?.round?.number, 1)
+        XCTAssertNil(guest.match?.revealEndsAt)
+    }
+
+    @MainActor
+    func testDisconnectDoesNotRestartRevealAndLeavingCancelsAdvance() async throws {
+        var time = Date(timeIntervalSince1970: 1_000)
+        let transport = NearbySession(networkingEnabled: false)
+        let store = GameStore(startTimer: false, transport: transport, clock: { time })
+        defer { store.leave() }
+        store.hostParty()
+        let guest = Player(id: UUID(), name: "Guest", avatar: 1)
+        let peer = MCPeerID(displayName: "guest")
+        transport.onMessage?(.join(JoinRequest(player: guest, catalogVersion: GameRules.catalogVersion)), peer)
+        store.startMatch()
+        let round = try XCTUnwrap(store.match?.round)
+        time = round.deadline
+        store.tick(time)
+        let deadline = try XCTUnwrap(store.match?.revealEndsAt)
+        time = time.addingTimeInterval(4)
+        transport.onConnection?(peer, false)
+        XCTAssertEqual(store.match?.revealEndsAt, deadline)
+        store.leave()
+        time = deadline
+        store.tick(time)
+        XCTAssertEqual(store.screen, .home)
+        XCTAssertNil(store.match)
+        store.startSolo()
+        let solo = try XCTUnwrap(store.match?.round)
+        time = solo.startsAt.addingTimeInterval(1)
+        store.tick(time)
+        store.choose(solo.locationID)
+        XCTAssertNil(store.match?.revealEndsAt)
+        store.tick(time.addingTimeInterval(100))
+        XCTAssertEqual(store.match?.stage, .reveal, "Solo still advances at the player's pace")
+    }
+
+    @MainActor
     func testManualPauseSurvivesAppSwitchWhileAutomaticPauseResumes() async throws {
         var time = Date(timeIntervalSince1970: 1_000)
         let store = GameStore(startTimer: false, clock: { time })

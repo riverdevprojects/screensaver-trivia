@@ -19,7 +19,7 @@ Use two or more physical iPhones running iOS 16 or later, built from the same co
 4. Answer on B first. B’s choice should lock. Neither device should disclose the correct answer until A answers or time expires.
 5. Answer on A. Both devices should reveal the same location, each player’s correct/wrong status and the same total scores.
 6. Repeat with a timeout, wrong answers and taps at the deadline. Late or duplicate packets must not add points.
-7. Only A should advance rounds. Finish the tour and compare both leaderboards. Replay: scores reset and both players remain present.
+7. After each reveal, both devices should show an 8-second countdown and automatically move to the same next destination without a host tap. Confirm this after both all-player answers and timeouts. After the last reveal, both should automatically show results. Compare both leaderboards. Replay: scores reset and both players remain present.
 8. Disconnect B mid-round. A should mark B offline and continue without waiting for B indefinitely. B should return Home with a connection message once the transport detects departure.
 9. Background B during a round. B leaves the game. Background or close A: the party should end for B.
 10. Deny Local Network permission on a fresh installation. The browser should remain usable and explain how to open app settings. Enable permission and try again.

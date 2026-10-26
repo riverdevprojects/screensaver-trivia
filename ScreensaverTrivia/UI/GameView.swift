@@ -181,7 +181,13 @@ struct GameView: View {
                         .font(.party(9, weight: .medium)).opacity(0.7) }
                 }.foregroundStyle(.white).accessibilityIdentifier("roundFeedback")
                 Spacer(minLength: 4)
-                if store.isHost {
+                if store.isParty, match.revealEndsAt != nil {
+                    Text(round.number == match.roundCount
+                         ? "Results in \(store.revealCountdown)s"
+                         : "Next destination in \(store.revealCountdown)s")
+                        .font(.party(12)).foregroundStyle(.white).monospacedDigit()
+                        .accessibilityIdentifier("revealCountdown")
+                } else if store.isHost {
                     Button { store.nextRound() } label: {
                         HStack(spacing: 8) {
                             Text(round.number == match.roundCount ? "See results" : "Next destination")

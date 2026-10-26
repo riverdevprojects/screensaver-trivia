@@ -63,6 +63,10 @@ final class GameStore: ObservableObject {
         guard let round = match?.round else { return 0 }
         return max(0, Int(ceil(round.startsAt.timeIntervalSince(now))))
     }
+    var revealCountdown: Int {
+        guard match?.stage == .reveal, let deadline = match?.revealEndsAt else { return 0 }
+        return max(0, Int(ceil(deadline.timeIntervalSince(now))))
+    }
     var canAnswer: Bool {
         match?.stage == .round && countdown == 0 && remaining > 0 && selectedChoice == nil && !soloPaused
     }
@@ -163,6 +167,7 @@ final class GameStore: ObservableObject {
         if round.number < match.roundCount { beginRound(number: round.number + 1) }
         else {
             self.match?.stage = .finished
+            self.match?.revealEndsAt = nil
             screen = .results
             recordStats()
             broadcast()
@@ -250,8 +255,12 @@ final class GameStore: ObservableObject {
     func tick(_ date: Date) {
         guard screen == .game, !soloPaused else { return }
         now = date.addingTimeInterval(isHost ? 0 : clockOffset)
-        guard isHost, match?.stage == .round, let round = match?.round else { return }
-        if now >= round.deadline { reveal() }
+        guard isHost, let match else { return }
+        if match.stage == .round, let round = match.round, now >= round.deadline {
+            reveal()
+        } else if isParty, match.stage == .reveal, let deadline = match.revealEndsAt, now >= deadline {
+            nextRound()
+        }
     }
 
     private func validateCatalog() -> Bool {
@@ -281,6 +290,7 @@ final class GameStore: ObservableObject {
         roundAnswers = [:]
         match?.answers = []
         match?.answeredPlayerIDs = []
+        match?.revealEndsAt = nil
         match?.round = GameRules.makeRound(location: location, allLocations: catalog.locations,
             number: number, startsAt: now.addingTimeInterval(lead), duration: settings.duration)
         match?.stage = .round
@@ -305,6 +315,8 @@ final class GameStore: ObservableObject {
     private func reveal() {
         guard isHost, var match, match.stage == .round, let round = match.round else { return }
         match.stage = .reveal
+        now = max(now, clock())
+        match.revealEndsAt = isParty ? now.addingTimeInterval(GameRules.partyRevealDuration) : nil
         match.answers = Array(roundAnswers.values)
         for index in match.players.indices {
             guard let answer = roundAnswers[match.players[index].id] else { continue }
